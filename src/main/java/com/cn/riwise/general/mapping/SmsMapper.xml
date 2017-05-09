@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cn.riwise.general.dao.SmsDao">
+	<select id="getSmsCode" resultMap="codemap">
+		select *
+		from
+		smstemplate
+		where  mycode=#{valicode};
+	</select>
+	<resultMap type="RiwiseMessageObj" id="codemap">
+		<id column="id" property="id" />
+		<result column="alicode" property="alicode" />
+		<result column="mycode" property="mycode" />
+	</resultMap>
+	<select id="getSmsValicode" resultType="Sms">
+		select *
+		from
+		smscode
+		where    
+		  Mobile=#{mobile}
+		 <if test="SMSCode!=null and SMSCode!=''">
+		  and SMSCode=#{SMSCode}
+		 </if>
+		 <if test="Starttime!=null and Starttime!=''">
+		  and DATE_FORMAT(#{Starttime},'%Y-%m-%d %H:%i:%s')&lt;=TimeUpdate
+		 </if>
+		 <if test="Endtime!=null and Endtime!=''">
+		  and DATE_FORMAT(#{Endtime},'%Y-%m-%d %H:%i:%s')&gt;=TimeUpdate limit 0,1
+		 </if>
+	</select>
+	
+	<insert id="insertSmsCode"  parameterType="Sms">
+	    insert into smscode
+		(mobile,smscode,timeupdate)
+		VALUES
+		(#{Mobile},#{SMSCode},now())
+	</insert>
+</mapper>

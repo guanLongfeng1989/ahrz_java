@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cn.riwise.general.dao.LocationDao">
+	<select id="getLocationObj" resultMap="listlocationmap">
+		select *
+		from
+		location
+		where  pid=#{pid}
+		<if test="name!='' and name!=null">
+		 and (name LIKE CONCAT(CONCAT('%', #{name}), '%') or PinyinShort LIKE CONCAT(CONCAT('%', #{name}), '%') or Pinyinfull LIKE CONCAT(CONCAT('%', #{name}), '%'))
+		
+		</if>
+	</select>
+	<resultMap type="LocationObj" id="listlocationmap">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="pingyinshort" property="pingyinshort" />
+		<result column="pingyinfull" property="pingyinfull" />
+		<result column="pid" property="pid" />
+		<result column="isstate" property="isstate"/>
+	</resultMap>
+</mapper>
